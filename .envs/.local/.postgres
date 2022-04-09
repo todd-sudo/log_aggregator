@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=log_aggregator
+POSTGRES_USER=FxVgGTHEhtjRqbHCJYMnwzFsMHGeSguI
+POSTGRES_PASSWORD=rNiRKsjLYDogcsS8WCdg8S4DPw7bcbePmFB3QAPeM9lF1ndBTUG4EQB76BKSWgYR
