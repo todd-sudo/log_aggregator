@@ -2,8 +2,6 @@ import datetime
 
 from apachelogs import LogParser
 from django.conf import settings
-import pytz
-from django.utils import timezone
 
 from .models import LogFile
 

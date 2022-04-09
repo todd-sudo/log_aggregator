@@ -1,4 +1,4 @@
-# log_aggregator
+# Агрегатор лог-файлов Apache
 
 Тестовое задание - Агрегатор Логов Apache
 
@@ -7,61 +7,60 @@
 
 License: MIT
 
-## Settings
 
-Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+## Описание
 
-## Basic Commands
+#### Административная панель - http://127.0.0.1:8000/admin/
+#### API Документация - http://127.0.0.1:8000/api/docs/
+#### Стек:
+- Django/Django Rest Framework
+- Celery
+- Redis
+- Docker/Docker-compose
+- apachelogs
+- Swagger UI
 
-### Setting Up Your Users
+## Настройки
 
--   To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
+#### В файле настроек `config/settings/base.py` прописать путь до файла с логами
+    
+```python
+PATH_APACHE_LOGS = "access_log.log"
+```
+#### В корне проекта, есть пример файла с логами
 
--   To create a **superuser account**, use this command:
 
-        $ python manage.py createsuperuser
+## Запуск
 
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-### Type checks
-
-Running type checks with mypy:
-
-    $ mypy log_aggregator
-
-### Test coverage
-
-To run the tests, check your test coverage, and generate an HTML coverage report:
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-#### Running tests with pytest
-
-    $ pytest
-
-### Live reloading and Sass CSS compilation
-
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
-
-### Celery
-
-This app comes with Celery.
-
-To run a celery worker:
-
-``` bash
-cd log_aggregator
-celery -A config.celery_app worker -l info
+#### 1. Build project:
+    
+```bash
+./scripts/build_local.sh
 ```
 
-Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
+#### 2. Migrate:
 
-## Deployment
+```bash
+./scripts/migrate_local.sh
+```
 
-The following details how to deploy this application.
+#### 3. Create superuser:
 
-### Docker
+```bash
+./scripts/manage_local.sh createsuperuser
+```
 
-See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+#### 4. Up project:
+
+```bash
+./scripts/up_local.sh
+```
+
+#### 5. Запуск парсинга файла с логами
+
+- Перейти в административную панель/периодичные таски `http://127.0.0.1:8000/admin/django_celery_beat/periodictask/`
+- Выбрать таску для парсинга файла
+- Выставить ей поле `Enabled` в `True`(нажать на check box):
+    - так же можно настроить периодичность выполнения задачи парсинга файла с логами 
+
+Далее раз в день будет парситься файл с логами, распаршенные данные будут добавляться в базу данных.
